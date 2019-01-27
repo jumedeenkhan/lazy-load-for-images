@@ -2,14 +2,14 @@
 
 /**
  * Plugin Name: Lazy Load for Images
- * Plugin URI:  https://wordpress.org/plugins/lazy-load-for-images
+ * Plugin URI:  http://bit.ly/2FmNw2v
  * Description: Lazy Load WordPress images. Load images only after scrolling down and when viewport.
  * Author:      Jumedeen khan
  * Author URI:  https://www.supportmeindia.com/
  * Text Domain: lazy-load-for-images
  * License:     GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
- * Version:     1.0.4
+ * Version:     1.1
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,10 @@ final class Lazy_Load_Images {
 
 	//* Class for constructor
 	public function __construct() {
+		//* Don't Lazy Load
+		if ( is_admin() || is_preview() || is_feed() || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ( defined( 'DOING_CRON' ) && DOING_CRON ) || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) || ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST ) ) {
+			return;
+		}
 
 		//* LLI Hooks
 		add_filter( 'the_content', array( __CLASS__, 'lli_images' ), 12 );
@@ -50,11 +54,6 @@ final class Lazy_Load_Images {
 
 	//* LLI content images for Lazy Loaded
 	public static function lli_images( $content ) {
-		
-		//* Don't lazyload for feeds, previews
-		if ( is_admin() || is_feed() || is_preview() ) {
-			return;
-		}
 
 		//* Don't lazy-load if content already loaded
 		if ( false !== strpos( $content, 'data-src' ) ) {
