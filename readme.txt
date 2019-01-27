@@ -5,7 +5,7 @@ Tags:              lazy, load, images, lazy load for images, lazyload, loading, 
 Requires at least: 4.0
 Tested up to:      5.0
 Requires PHP:      5.6
-Stable tag:        1.0.4
+Stable tag:        1.1
 License:           GPLv2 or later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,17 +23,18 @@ This plugin is structured very simple and does not need any settings. Activate, 
 Yes, you can exclude some images to lazy loading. This can be done by adding `data-lazy="1"` attribute to images that should not be lazy loaded.
 
 
-> #### Lazy Load for Images - Features & Advantages
+> #### Lazy Load for Images - Features & Advantages ####
 >
 > - Load images only when required.<br />
 > - **Improve page loading speed.**<br />
 > - Reduce no. of HTTP requests.<br />
 > - Lazy load also working on mobiles.<br />
+> - Plugin used pure JS, no need of jQuery.<br />
 > - Plugin used only 506 bytes Javascript.<br />
 > - Plugin total size is less than **10kb**.<br />
 > - No need configurations (Just activate, It's Done!)<br />
 > - SEO friendly (search engine optimized).<br />
-> - Of course, available on [GitHub](https://github.com/jumedeenkhan/lazy-load-for-images)<br />
+> - Of course, available on [GitHub](https://github.com/Jumedeenkhan/lazy-load-for-images)<br />
 
 
 == Installation ==
@@ -76,5 +77,11 @@ Yes, Lazy Load Images plugin work very well with every cache plugin.
 
 
 == Changelog ==
+
+= 1.1 =
+
+* Fixed preview blank issue for WP v5.0.3.
+
 = 1.0 =
+
 * First version.
