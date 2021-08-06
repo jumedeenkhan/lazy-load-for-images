@@ -2,99 +2,63 @@
 
 /**
  * Plugin Name: Lazy Load for Images
- * Plugin URI:  http://bit.ly/2FmNw2v
- * Description: Lazy Load WordPress images. Load images only after scrolling down and when viewport.
+ * Plugin URI:  https://www.mozedia.com/lazy-load-images-in-wordpress/
+ * Description: Lazyload wordpress images with a small javascript without jQuery or others libraries.
  * Author:      Jumedeen khan
- * Author URI:  https://www.supportmeindia.com/
+ * Author URI:  https://www.mozedia.com/
  * Text Domain: lazy-load-for-images
- * License:     GPLv2 or later
- * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
- * Version:     1.1
+ * Version:     1.4.2
  *
- * This is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, If not, see <https://www.gnu.org/licenses/>.
  */
 
-//* Quit files
-defined( 'ABSPATH' ) || exit;
+//* Add filter to replace gravatar, post content and widget images
+add_filter( 'get_avatar', 'mozedia_lazyload_images', PHP_INT_MAX );
+add_filter( 'the_content', 'mozedia_lazyload_images', PHP_INT_MAX );
+add_filter( 'widget_text', 'mozedia_lazyload_images', PHP_INT_MAX );
+add_filter( 'post_thumbnail_html', 'mozedia_lazyload_images', PHP_INT_MAX );
 
-//* Lazy Load Images plugin class
-add_action( 'wp', array( 'Lazy_Load_Images', 'instance' ) );
+//* Also support genesis thumbnails (if is available)
+add_filter( 'genesis_get_image', 'mozedia_lazyload_images', PHP_INT_MAX );
 
-final class Lazy_Load_Images {
-
-	//* Class for instance
-	public static function instance() {
-		new self();
+//* start function for lazy load images
+function mozedia_lazyload_images( $html ) {
+	// Don't LazyLoad if the thumbnail is in
+	if( is_admin() || is_feed() || is_preview() || empty( $html ) ) {
+		return $html;
 	}
 
-	//* Class for constructor
-	public function __construct() {
-		//* Don't Lazy Load
-		if ( is_admin() || is_preview() || is_feed() || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ( defined( 'DOING_CRON' ) && DOING_CRON ) || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) || ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST ) ) {
-			return;
-		}
-
-		//* LLI Hooks
-		add_filter( 'the_content', array( __CLASS__, 'lli_images' ), 12 );
-		add_filter( 'post_thumbnail_html', array( __CLASS__, 'lli_images' ) );
-		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'lli_effects' ) );
-		add_action( 'wp_footer', array( __CLASS__, 'lli_scripts' ) );
+	// Stop LalyLoad process with this hook
+	if ( ! apply_filters( 'do_not_lazyload', true ) ) {
+		return $html;
 	}
 
-	//* LLI content images for Lazy Loaded
-	public static function lli_images( $content ) {
+	$html = preg_replace_callback( '#<img([^>]*) src=("(?:[^"]+)"|\'(?:[^\']+)\'|(?:[^ >]+))([^>]*)>#', '__mozedia_lazyload_replace_callback', $html );
 
-		//* Don't lazy-load if content already loaded
-		if ( false !== strpos( $content, 'data-src' ) ) {
-			return $content;
-		}
-		
-		//* No lazy images
-		if ( strpos( $content, '-image' ) === false ) {
-			return $content;
-		}
-	
-	    //* Replace images src to data-src
-		return preg_replace_callback( '/(?P<all> (?# ) <img(?P<before>[^>]*) (?# ) ( (?# ) class=["\'](?P<class1>.*?(?:wp-image-|wp-post-image)[^>"\']*)["\'] (?P<between1>[^>]*) src=["\'](?P<src1>[^>"\']*)["\'] | (?# ) src=["\'](?P<src2>[^>"\']*)["\'] (?P<between2>[^>]*) class=["\'](?P<class2>.*?(?:wp-image-|wp-post-image)[^>"\']*)["\'] ) (?P<after>[^>]*) (?# ) (?P<closing>\/?)> (?# ) )/x', array( 'Lazy_Load_Images', 'replace_images' ), $content );
+	return $html;
+}
+
+
+//* Used to check if LazyLoad this or not
+function __mozedia_lazyload_replace_callback( $matches ) {
+	if ( strpos( $matches[1] . $matches[3], 'data-no-lazy=' ) === false && strpos( $matches[1] . $matches[3], 'data-src=' ) === false && strpos( $matches[2], '/wpcf7_captcha/' ) === false ) {
+		$html = sprintf( '<img%1$s src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src=%2$s%3$s><noscript><img%1$s src=%2$s%3$s></noscript>',
+						$matches[1], $matches[2], $matches[3] );
+
+		//* Filter the LazyLoad HTML output
+		$html = apply_filters( 'mozedia_lazyload_html', $html, true );
+
+		return $html;
+	} else {
+		return $matches[0];
+	}
+}
+
+// Add lazy load script in footer inline HTML
+add_action( 'wp_footer', 'mozedia_lazyload_script', PHP_INT_MAX );
+function mozedia_lazyload_script() {
+	if ( ! apply_filters( 'do_not_lazyload', true ) ) {
+		return;
 	}
 
-	//* Add lazy class for data-src attribute images
-	public static function replace_images( $matches ) {
-		
-		//* Image Placeholder
-		$placeholder_image = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
-		
-		//* Disable lazy load for specific images
-		if ( false !== strpos( $matches['all'], 'data-lazy="1"' ) || false !== strpos( $matches['class1'] . $matches['class2'], 'lazy' ) ) {
-			return $matches['all'];
-		} else {
-            return '<img ' . $matches['before']
-                   . ' class="lazy ' . $matches['class1'] . $matches['class2'] . '" src="' . $placeholder_image . '" '
-                   . $matches['between1'] . $matches['between2']
-                   . ' data-src="' . $matches['src1'] . $matches['src2'] . '" '
-                   . $matches['after']
-                   . $matches['closing'] . '><noscript>' . $matches['all'] . '</noscript>';
-		}
-	}
-
-	//* Image load effect style.css
-	public static function lli_effects() {?>
-		<style>img.lazy[data-src]{opacity:0;width:1px;height:1px;position:absolute;}</style>
-     <?php
-	}
-
-	//* Add lazyload script in footer
-	public static function lli_scripts() {?><script>!function(){function i(){var t=document.querySelectorAll("img.lazy"),e=t.length;for(!e&&window.removeEventListener("scroll",i);e--;){var r=window.innerHeight;if(t[e].getBoundingClientRect().top-r<=100){if(t[e].getAttribute("data-src")&&(t[e].src=t[e].getAttribute("data-src")),"PICTURE"===t[e].parentElement.tagName)for(var n=t[e].parentElement.querySelectorAll("source"),a=n.length;a--;);t[e].addEventListener("load",function(){this.classList.remove("lazy")})}}}i(),window.addEventListener("scroll",i)}();</script><?php
-	}
+	echo '<script type="text/javascript">(function(a,e){function f(){var d=0;if(e.body&&e.body.offsetWidth){d=e.body.offsetHeight}if(e.compatMode=="CSS1Compat"&&e.documentElement&&e.documentElement.offsetWidth){d=e.documentElement.offsetHeight}if(a.innerWidth&&a.innerHeight){d=a.innerHeight}return d}function b(g){var d=ot=0;if(g.offsetParent){do{d+=g.offsetLeft;ot+=g.offsetTop}while(g=g.offsetParent)}return{left:d,top:ot}}function c(){var l=e.querySelectorAll("[data-src]");var j=a.pageYOffset||e.documentElement.scrollTop||e.body.scrollTop;var d=f();for(var k=0;k<l.length;k++){var h=l[k];var g=b(h).top;if(g<(d+j)){h.src=h.getAttribute("data-src");h.removeAttribute("data-src")}}}if(a.addEventListener){a.addEventListener("DOMContentLoaded",c,false);a.addEventListener("scroll",c,false)}else{a.attachEvent("onload",c);a.attachEvent("onscroll",c)}})(window,document);</script>';
 }
