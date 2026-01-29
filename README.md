@@ -68,9 +68,7 @@ Available options include:
 
 For detailed documentation, usage examples, available filters, and advanced configuration options for Smart LazyLoad are available.
 
-See the the detailed guide:
-
-* [How to Lazy Load Images, Videos and Iframes in WordPress?](https://www.mozedia.com/lazy-load-wordpress/)
+See the the detailed guide on [how to implement lazy load in WordPress?](https://www.mozedia.com/lazy-load-wordpress/)
 
 **Support**
 
