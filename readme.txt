@@ -1,139 +1,231 @@
-=== Lazy Load for Images ===
-Contributors: jumedeenkhan, mozedia
-Donate link: https://www.paypal.me/jumedeenkhan
-Tags: lazyload, lazy load, images, thumbnail, thumbnails, avatar, gravatar, performance, photos, lazy load for images
-Requires at least: 4.7
-Tested up to: 5.8
-Requires PHP: 5.6
-Stable tag: 1.4.2
+=== Smart LazyLoad – Lazy Load Images, Videos and Iframes ===
+Contributors: jumedeenkhan
+Donate link: https://buymeacoffee.com/jumedeenkhan
+Tags: lazy load, lazyload, images, iframes, video, thumbnails, avatar, gravatar, youtube
+Requires at least: 5.8
+Requires PHP: 7.2
+Tested up to: 6.9
+Stable tag: 2.0.0
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Lazy Load WordPress images with a small javascript. Load images only after scrolling down and when viewport and improve page speed.
-
+The best free, lightweight lazy load plugin for WordPress. Lazy loading images, videos, and iframes to improve performance and Core Web Vitals scores.
 
 == Description ==
-Lazyload WordPress Images without any manual configurations and helps increasing performance of your blog or website.
 
-This plugin make lazy load of all images **(like thumbnails, post content images, avatars, gravatars, widget images etc.)**.
+**Smart LazyLoad** is a fast, lightweight, and SEO-friendly lazy loading plugin for WordPress. It improves page speed and Core Web Vitals by loading images, iframes, videos, and background images **only when they are about to enter the viewport**.
 
-All images load only when users scroll down and they are on viewport. It's SEO and user friendly, working well with all browsers.
+Built with **pure JavaScript**, Smart Lazy Load does not rely on jQuery or other third-party libraries, keeping your site fast and bloat-free.
 
-This plugin is structured very simple and does not need any settings. Activate, Done! Plugin use less than 1kb JavaScript. no need of jQuery.
+Unlike heavy optimization plugins, Smart LazyLoad focuses on one thing only: **reducing unnecessary resource loading while maintaining compatibility, accessibility, and SEO best practices.**
 
-> #### Lazy Load for Images - Features & Advantages ####
->
-> - Load images only when required.<br />
-> - **Improve page loading speed.**<br />
-> - Reduce no. of HTTP requests.<br />
-> - Lazy load also working on mobiles.<br />
-> - Plugin used pure JS, no need of jQuery.<br />
-> - Plugin used less than **1kb** Javascript.<br />
-> - Also support **Gravatar**.<br />
-> - Also support **Genesis Framework**.<br />
-> - SEO friendly (search engine optimized).<br />
-> - Worked great with genesis framework.<br />
-> - No need configurations (Just activate it, It's Done!)<br />
-> - Of course, available on [GitHub](https://github.com/jumedeenkhan/lazy-load-for-images)<br />
+All features are optional — you can use the plugin with default settings or fine-tune it as needed.
 
-Simply install the plugin to enjoy a faster website. No options are available : you install it and the plugin takes care of everything.
+== Features ==
 
+* Lazy load images in posts, pages, widgets, thumbnails, avatars, and comments
+* Lazy load iframes and embedded videos
+* Lazy load background images from inline styles and data attributes
+* Optional YouTube iframe replacement with video thumbnails
+* Intelligent first-image skipping for better LCP scores
+* Supports both JavaScript-based and native browser lazy loading
+* Inline plugin CSS and JavaScript (optional)
+* Option to disable lazy loading for logged-in users
+* Fully responsive and mobile-friendly
+* SEO-friendly with noscript fallbacks
+* Accessibility-aware
+* Pure JavaScript (no jQuery dependency)
+* Lightweight and performance-focused
+* Open source and available on [GitHub](https://github.com/jumedeenkhan/lazy-load-for-images)
+
+== Screenshots ==
+
+1. Smart LazyLoad settings menu
+2. Smart LazyLoad settings page
 
 == Installation ==
 
-= Installing this plugin - Simple =
-1. In your WordPress admin panel, go to *Plugins > New Plugin*, search for **Lazy Load for Images** and click "*Install now*"
-2. Otherwise, download plugin and upload to your plugins directory, which usually is `/wp-content/plugins/`.
-3. Activate plugin, All Done!.
+= Automatic Installation =
 
+1. Go to **Plugins → Add New** in your WordPress admin
+2. Search for **Smart LazyLoad**
+3. Click **Install Now**, then **Activate**
 
-= Need more help? =
-Feel free to [open a support ticket](https://wordpress.org/support/plugin/lazy-load-for-images/).
+= Manual Installation =
 
+1. Download the plugin ZIP file
+2. Upload it to `/wp-content/plugins/`
+3. Activate the plugin from **Plugins → Installed Plugins**
+4. Go to the plugin **setting page** and enable lazy load
+5. Now, lazy loading starts working automatically
 
-= Missing something? =
-If you would like to have an additional feature for this plugin, [let me know](https://www.mozedia.com/contact/)
+== Configuration ==
 
+You can configure the plugin from:
+
+**Settings → LazyLoad**
+
+Available options include:
+
+* Enable or disable lazy loading
+* Lazy load images, iframes, and videos
+* Enable background image lazy loading
+* Replace YouTube videos with thumbnails
+* Adjust lazy load threshold
+* Enable native browser lazy loading
+* Inline plugin CSS and JavaScript
+* Disable lazy loading for logged-in users
+
+**Need more help?**
+
+For detailed documentation, usage examples, available filters, and advanced configuration options for Smart LazyLoad are available.
+
+See the [Lazy Load Configuration Guide](https://www.mozedia.com/lazy-load-wordpress/)
+
+**Support**
+
+We are here to help. Feel free to open a new thread on the [Support Forum](https://wordpress.org/support/plugin/lazy-load-for-images/).
 
 == Frequently Asked Questions ==
-= Does this plugin lazy load all images on a post? =
-Yes, All images that uploaded via you media library loaded with lazy load, with featured images.
 
-and this plugin also support Genesis Framework speciailly.
+= Does Smart LazyLoad lazy load all images? =
 
+Yes. It supports lazy loading for:
 
-= How can I deactivate Lazy Load on some images? =
-Simply add a `data-no-lazy="1"` attribute tag in your specific image.
+* Post and page content images
+* Featured images
+* Widget images
+* Avatars and comments
+* Background images
 
+You can control what is lazy loaded from the settings page.
 
-= How can i deactivate Lazy Load on some pages? = 
+= How can I exclude a specific image or iframe? =
 
-You can use <em>do_not_lazyload</em> filter.
+Add one of the following attributes or classes to the element:
 
-Here, an example to put in functions.php files:
+* `no-lazyload`
+* `skip-lazy`
+* `data-no-lazy`
+* `data-skip-lazy`
+
+You can also use filters:
+
+* `mozedia_lazyload_excluded_attributes`
+* `mozedia_lazyload_iframe_excluded_patterns`
+
+= Can I disable lazy loading on specific pages? =
+
+Yes. Use the following filter:
+
 `
-add_action( 'wp', 'deactivate_lli_lazyload_on_single' );
-function deactivate_lli_lazyload_on_single() {
+add_filter( 'do_mozedia_lazyload', '__return_false' );
+`
+
+Or conditionally disable it:
+
+`
+add_action( 'wp', 'disable_mozedia_lazyload' );
+function disable_mozedia_lazyload() {
 	if ( is_single() ) {
-		add_filter( 'do_not_lazyload', '__return_false' );
+		add_filter( 'do_mozedia_lazyload', '__return_false' );
 	}
 }
 `
 
-= How do I lazy load other images in my theme? =
-If lazy load not working for your theme, you can add a `add_filter` in plugin class PHP files at hooks section, i.e. like this:
+= Is Smart LazyLoad compatible with caching and optimization plugins? =
 
-`add_filter( 'post_thumbnail_html', array( __CLASS__, 'lli_lazyload_images' ) );`
+Yes. It works well with most caching, CDN, and optimization plugins.
 
+= Is this plugin SEO-friendly? =
 
-= How can I use custom placeholder image or GIF? =
-By default, we use `"data:image/gif;base64"` for placeholder image. You can change it url with custom URL.
+Yes. Smart LazyLoad preserves original content using noscript fallbacks, supports native lazy loading, and allows skipping the first image for better LCP performance.
 
+= Does it support background images? =
 
-= Does this plugin work with any caching plugins? =
-Yes, Lazy Load Images plugin work very well with every cache plugin.
+Yes. Smart LazyLoad can automatically lazy-load background images defined via the style attribute, such as:
+
+`
+<div style="background-image: url(image-slug.jpg);">
+`
+You can also apply it manually yourself.
+
+Simply add this special markup to the element on which you want to apply lazy loading:
+
+`
+<div class="mozedia-lazyload" data-bg="url(../img/image-slug.jpg)"></div>
+`
+
+= Can I use a custom placeholder image or GIF? =
+
+Yes. Change the SVG placeholder using this filter:
+
+`
+add_filter( 'mozedia_svg_placeholder', 'mozedia_replace_image_placeholder');
+function mozedia_replace_image_placeholder() {
+	return 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"></svg>';
+}
+`
+Lazy loaded iframes use a separate placeholder value (default: `about:blank`).
+
+You can customize the iframe placeholder using the following filter:
+
+`
+add_filter( 'mozedia_lazyload_placeholder', function () {
+	return 'about:blank';
+});
+`
+
+= What should I do if the plugin is not working? =
+
+If Smart LazyLoad plugin is not working as expected, please check the following:
+
+- Make sure the plugin is enabled
+- Clear browser, plugin, and CDN caches
+- Check if lazy loading is disabled for logged-in users
+- Disable other lazy load plugins to avoid conflicts
+- Ensure elements are not excluded using no-lazy attributes
+- View the page on the frontend (not page builder editor)
+
+If the issue persists, feel free to [contact us](https://www.mozedia.com/contact/)
 
 == Upgrade Notice ==
 
-= 1.4.2 =
 
-* Tested for WordPress 5.8
-* PHP Improvements.
-* Plugin author and URL changed.
+= 2.0.0 =
+
+* Added iframe and videos support
+* Added background image lazy loading
+* Added YouTube thumbnail replacement
+* Improved Core Web Vitals handling
+* Native lazy loading support
+* Cleaner admin UI and settings
+* Performance and security improvements
 
 == Changelog ==
 
-= 1.4.2 =
+= 2.0.0 =
 
-* Tested for WordPress 5.8
-* PHP Improvements.
-* Plugin author and URL changed.
+* Complete code refactor
+* Now also support iframe/video
+* Background image lazy loading
+* YouTube thumbnail mode
+* Improved performance and stability
+* Updated admin settings page
+* WordPress 6.9 compatibility
 
-= 1.4.0 =
+= 1.5 =
 
-* Upgrade for latest version.
-* JavaScript improvements.
-* Add genesis framework support.
-* Delete unused javascrit liberaries.
-* Added hooks for stop lazy load images.
-* plugin php code replaced with new php.
+* Tested with WordPress 6.5.2
+* JavaScript and PHP improvements
+* SVG placeholder support
 
-= 1.3.4 =
+= 1.4.x =
 
-* Fixed some buges.
-
-= 1.3.3 =
-
-* Ignore AMP Pages.
-
-= 1.3.0 =
-
-* Upgraded for version 5.3.
-
-= 1.2.0 =
-
-* Placeholder image changed.
-* Improve PHP.
-* Lazy load script improvement.
+* Genesis framework compatibility
+* Improved hooks and filters
+* Bug fixes and cleanup
 
 = 1.0.0 =
 
-* First version.
+* Initial release
