@@ -1,0 +1,163 @@
+.mll-admin {
+    max-width: 900px
+}
+
+.mll-admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 26px 38px;
+    background-color: #3e50ff;
+    color: #fff;
+	transition: background-color 0.3s ease;
+}
+
+.mll-admin-header:hover {
+	background-color: #1729d8
+}
+
+.mll-title {
+    font-size: 32px;
+    color: #fff;
+    font-weight: 700;
+    margin: 0 auto 20px
+}
+
+.mll-subtitle {
+    display: block;
+    font-size: 13px;
+    letter-spacing: 2px;
+    opacity: .9
+}
+
+.mll-header-right {
+    text-align: right;
+    font-size: 14px
+}
+
+.mll-stars {
+    font-size: 18px;
+    color: #fff;
+    text-decoration: none
+}
+
+.mll-admin-body {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 20px 30px
+}
+
+.mll-summary {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 25px
+}
+
+.mll-form fieldset {
+    margin-bottom: 20px;
+    padding: 0;
+    border: 0
+}
+
+.mll-form legend {
+    font-size: 15px;
+    padding: 15px 0;
+    font-weight: 600;
+    color: #323232
+}
+
+.mll-option {
+    position: relative;
+    margin: 18px 0 18px 42px;
+    font-size: 14px
+}
+
+.mll-option input[type=checkbox] {
+    position: absolute;
+    opacity: .01
+}
+
+.mll-option label {
+    cursor: pointer
+}
+
+.mll-option label:before {
+    content: "";
+    position: absolute;
+    left: -42px;
+    top: -5px;
+    width: 28px;
+    height: 28px;
+    border: 2px solid #809cab;
+    border-radius: 4px;
+    background-color: #fff
+}
+
+.mll-option input[type=checkbox]:checked+label:after {
+    content: "✓";
+    position: absolute;
+    left: -34px;
+    top: 0;
+    font-size: 20px;
+    color: #2ebf8d
+}
+
+.mll-option input[type=number] {
+    margin-top: 8px;
+    padding: 6px;
+    width: 140px
+}
+
+.mll-form .button-primary {
+    background-color: #3e50ff;
+    border: 0;
+    box-shadow: 0 4px 8px rgba(0,0,0,.12);
+    padding: 10px 20px;
+    font-size: 15px;
+    text-transform: uppercase;
+    font-weight: 700;
+    transition: all .25s
+}
+
+.mll-form .button-primary:hover {
+    background-color: #1729d8;
+    transform: translateY(-2px)
+}
+
+.mll-stars span {
+    font-size: 17px;
+    margin: 10px 2px 0
+}
+
+.mll-rate-us {
+    text-align: right;
+    font-size: 15px;
+    line-height: 1.7
+}
+
+.mll-rate-us a {
+    color: #fff;
+    font-weight: 700
+}
+
+.mll-rate-us a:hover {
+    opacity: .8
+}
+
+.mll-disabled {
+    opacity: .5;
+    pointer-events: none
+}
+
+.mll-inline-error {
+    font-size: 13px;
+    margin-top: 6px;
+    color: #e02e2a;
+}
+
+@media (max-width:768px) {
+    .mll-admin-header {
+        flex-direction: column;
+        align-items: flex-start
+    }
+}
